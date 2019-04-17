@@ -17,6 +17,8 @@
 
 using namespace types;
 
+// https://en.wikipedia.org/wiki/BMP_file_format
+
 namespace bitmap
 {
     class file
@@ -33,7 +35,7 @@ namespace bitmap
             uint32_t data_offset { 0 };
         } BMP_HEADER;
 
-        typedef struct _img_header
+        typedef struct _inf_header
         {
             uint32_t header_size  { 0 };
             uint32_t image_width  { 0 };
@@ -46,13 +48,13 @@ namespace bitmap
             uint32_t y_px_per_m   { 0 };
             uint32_t colors_used  { 0 };
             uint32_t colors_sigf  { 0 };
-        } IMG_HEADER;
+        } INF_HEADER;
 
         #pragma pack(pop)
 
       public:
         BMP_HEADER bmp_header;
-        IMG_HEADER img_header;
+        INF_HEADER img_header;
         std::vector<vec3<float>> img_data;
 
         file(int width, int height, int bit_depth)
@@ -82,7 +84,7 @@ namespace bitmap
                     int color0 = img_data[i + j * img_header.image_width][0] * 0xFF;
                     int color1 = img_data[i + j * img_header.image_width][1] * 0xFF;
                     int color2 = img_data[i + j * img_header.image_width][2] * 0xFF;
-                    //int color = img_data[0][0];
+
                     image.write((char *)&color0, 1);
                     image.write((char *)&color1, 1);
                     image.write((char *)&color2, 1);

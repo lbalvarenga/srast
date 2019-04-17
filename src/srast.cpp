@@ -20,8 +20,8 @@ int main()
 {
     auto start_time = high_resolution_clock::now();
 
-    int width = 400;
-    int height = 300;
+    int width = 1920;
+    int height = 1080;
 
     std::vector<vec3<float>> image(width * height);
 

@@ -17,7 +17,7 @@
 namespace types
 {
     template <typename T>
-    class vec3
+    class vec3 // TODO: Make it variadic
     {
       public:
         T x, y, z;
