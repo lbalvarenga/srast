@@ -8,9 +8,14 @@
 
 #pragma once
 
+#include <utils/types.hpp>
+
 #include <fstream>
+#include <vector>
 #include <cstdint>
 #include <string>
+
+using namespace types;
 
 namespace bitmap
 {
@@ -48,6 +53,7 @@ namespace bitmap
       public:
         BMP_HEADER bmp_header;
         IMG_HEADER img_header;
+        std::vector<vec3<float>> img_data;
 
         file(int width, int height, int bit_depth)
         {
@@ -71,8 +77,15 @@ namespace bitmap
             {
                 for (unsigned int i = 0; i < img_header.image_width; ++i)
                 {
-                    int color = 0xFF1122;
-                    image.write((char *)&color, 3);
+                    // Since values are between 0 and 1, and each color takes
+                    // up a byte, we can just multiply it by 255 (0xFF).
+                    int color0 = img_data[i + j * img_header.image_width][0] * 0xFF;
+                    int color1 = img_data[i + j * img_header.image_width][1] * 0xFF;
+                    int color2 = img_data[i + j * img_header.image_width][2] * 0xFF;
+                    //int color = img_data[0][0];
+                    image.write((char *)&color0, 1);
+                    image.write((char *)&color1, 1);
+                    image.write((char *)&color2, 1);
                 }
             }
 
