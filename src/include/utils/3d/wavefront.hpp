@@ -10,3 +10,12 @@
 
 #include <utils/types.hpp>
 using namespace types;
+
+namespace wavefront
+{
+    class obj_file
+    {
+      public:
+        
+    };
+} // namespace wavefront

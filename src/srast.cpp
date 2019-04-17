@@ -6,13 +6,13 @@
 //  (c) Lucas Alvarenga    
 //      (lukeathedev)      
 
-#include <image/bitmap.hpp>
+#include <utils/image/bitmap.hpp>
 
 #include <utils/types.hpp>
 using namespace types;
 
 #include <srast/geometry.hpp>
-#include <utils/colors.hpp>
+#include <utils/image/colors.hpp>
 
 #include <iostream>
 #include <vector>

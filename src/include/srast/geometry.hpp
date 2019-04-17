@@ -11,7 +11,7 @@
 #include <utils/types.hpp>
 using namespace types;
 
-#include <utils/colors.hpp>
+#include <utils/image/colors.hpp>
 
 #include <vector>
 
