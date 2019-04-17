@@ -3,16 +3,12 @@
 //  / __| '__/ _` / __| __|
 //  \__ \ | | (_| \__ \ |_ 
 //  |___/_|  \__,_|___/\__|
-//  (c) Lucas Alvarenga
-//      (lukeathedev)
+//  (c) Lucas Alvarenga    
+//      (lukeathedev)      
 
 #pragma once
 
 #include <cstddef> // For NULL definition
-
-// Maybe I should template-ception this and
-// have a single template that allows for
-// multiple vector sizes.
 
 namespace types
 {
@@ -43,6 +39,35 @@ namespace types
                 case 0:  return this->x;
                 case 1:  return this->y;
                 case 2:  return this->z;
+                default: throw;
+            }
+        }
+    };
+
+    template <typename T>
+    class vec2
+    {
+      public:
+        T x, y;
+
+        vec2()
+        {
+            this->x = (T)NULL;
+            this->y = (T)NULL;
+        }
+
+        vec2(T x, T y)
+        {
+            this->x = x;
+            this->y = y;
+        }
+
+        T &operator [](int i)
+        {
+            switch(i)
+            {
+                case 0:  return this->x;
+                case 1:  return this->y;
                 default: throw;
             }
         }

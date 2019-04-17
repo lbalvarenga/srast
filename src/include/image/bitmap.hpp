@@ -3,19 +3,21 @@
 //  / __| '__/ _` / __| __|
 //  \__ \ | | (_| \__ \ |_ 
 //  |___/_|  \__,_|___/\__|
-//  (c) Lucas Alvarenga
-//      (lukeathedev)
+//  (c) Lucas Alvarenga    
+//      (lukeathedev)      
+
+//  Bitmap File I/O, capable of writing
+//  24-bit uncompressed images.
 
 #pragma once
 
 #include <utils/types.hpp>
+using namespace types;
 
 #include <fstream>
 #include <vector>
 #include <cstdint>
 #include <string>
-
-using namespace types;
 
 // https://en.wikipedia.org/wiki/BMP_file_format
 
@@ -52,20 +54,21 @@ namespace bitmap
 
         #pragma pack(pop)
 
-      public:
         BMP_HEADER bmp_header;
-        INF_HEADER img_header;
-        std::vector<vec3<float>> img_data;
+        INF_HEADER inf_header;
+
+      public:
+        std::vector<vec3<int>> data;
 
         file(int width, int height, int bit_depth)
         {
             bmp_header.file_size = width * height * (bit_depth / 8);
-            bmp_header.file_size += sizeof(bmp_header) + sizeof(img_header);
+            bmp_header.file_size += sizeof(bmp_header) + sizeof(inf_header);
 
-            img_header.image_width  = width;
-            img_header.image_height = height;
-            img_header.bit_depth    = bit_depth;
-            img_header.header_size  = sizeof(img_header);
+            inf_header.image_width  = width;
+            inf_header.image_height = height;
+            inf_header.bit_depth    = bit_depth;
+            inf_header.header_size  = sizeof(inf_header);
         }
 
         void write(std::string filename)
@@ -73,22 +76,13 @@ namespace bitmap
             std::ofstream image { filename, std::ios::binary };
 
             image.write((char *)&bmp_header, sizeof(bmp_header));
-            image.write((char *)&img_header, sizeof(img_header));
-
-            for (unsigned int j = 0; j < img_header.image_height; ++j)
+            image.write((char *)&inf_header, sizeof(inf_header));
+            
+            for (unsigned int i = 0; i < data.size(); ++i)
             {
-                for (unsigned int i = 0; i < img_header.image_width; ++i)
-                {
-                    // Since values are between 0 and 1, and each color takes
-                    // up a byte, we can just multiply it by 255 (0xFF).
-                    int color0 = img_data[i + j * img_header.image_width][0] * 0xFF;
-                    int color1 = img_data[i + j * img_header.image_width][1] * 0xFF;
-                    int color2 = img_data[i + j * img_header.image_width][2] * 0xFF;
-
-                    image.write((char *)&color0, 1);
-                    image.write((char *)&color1, 1);
-                    image.write((char *)&color2, 1);
-                }
+                image.write((char *)&data[i][0], 1);
+                image.write((char *)&data[i][1], 1);
+                image.write((char *)&data[i][2], 1);
             }
 
             return;

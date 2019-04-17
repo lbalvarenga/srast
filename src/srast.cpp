@@ -1,51 +1,44 @@
-//                     _
-//   ___ _ __ __ _ ___| |_
+//                     _   
+//   ___ _ __ __ _ ___| |_ 
 //  / __| '__/ _` / __| __|
-//  \__ \ | | (_| \__ \ |_
+//  \__ \ | | (_| \__ \ |_ 
 //  |___/_|  \__,_|___/\__|
-//  (c) Lucas Alvarenga
-//      (lukeathedev)
+//  (c) Lucas Alvarenga    
+//      (lukeathedev)      
 
 #include <image/bitmap.hpp>
+
 #include <utils/types.hpp>
+using namespace types;
+
+#include <srast/geometry.hpp>
+#include <utils/colors.hpp>
 
 #include <iostream>
 #include <vector>
-#include <chrono>
 
+#include <chrono>
 using namespace std::chrono;
-using namespace types;
+
+#define p(x, y) { x, y }
 
 int main()
 {
     auto start_time = high_resolution_clock::now();
 
-    int width = 1920;
-    int height = 1080;
+    geometry::canvas c(200, 200);
+    c.line(p(100, 100), p(20, 50));
+    c.line(p(200, 100), p(20, 50));
+    c.line(p(30, 10), p(300, 130));
 
-    std::vector<vec3<float>> image(width * height);
-
-    for (int j = 0; j < height; ++j)
-    {
-        for (int i = 0; i < width; ++i)
-        {
-            // Team red all the way
-            // Remember that due to endianness, values are
-            // actually BGR, not RGB.
-            image[i + j * width][0] = 0.0f;
-            image[i + j * width][1] = 0.0f;
-            image[i + j * width][2] = 1.0f;
-        }
-    }
-
-    bitmap::file bmp(width, height, 24);
-    bmp.img_data = image;
-    bmp.write("test.bmp");
+    bitmap::file bmp_file(c.width, c.height, 24);
+    bmp_file.data = c.image;
+    bmp_file.write("test.bmp");
 
     auto end_time = high_resolution_clock::now();
     auto exec_time = duration_cast<nanoseconds>(end_time - start_time).count();
 
-    std::cout << "Completed in " << (double)exec_time / 1000000000 << "s" << std::endl;
+    std::cout << "Rendered to 'test.bmp' in " << (double)exec_time / 1000000000 << "s" << std::endl;
 
     return 0;
 }
